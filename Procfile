@@ -1,0 +1,1 @@
+web: ./bin/fixie-wrench 1080:guard.ck6rf4lomx2c.us-east-2.rds.amazonaws.com:5432 & node dist/index.js

@@ -1,0 +1,8 @@
+node_modules
+example.ts
+loop.ts
+
+.env
+.env.local
+.env.development
+.env.production
