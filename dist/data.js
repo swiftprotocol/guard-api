@@ -17,8 +17,18 @@ const ethereumjs_wallet_1 = require("ethereumjs-wallet");
 const eth_crypto_1 = __importDefault(require("eth-crypto"));
 function retrieveData(address, key) {
     return __awaiter(this, void 0, void 0, function* () {
-        const data = yield globalThis.sql.query(`SELECT value FROM key_value WHERE key = '${key}+${address}'`);
+        console.log(`SELECT value FROM key_value WHERE key = '${key}+${address}'`);
+        const data = yield globalThis.sql
+            .query(`SELECT value FROM key_value WHERE key = '${key}+${address}'`)
+            .catch((err) => {
+            throw Error(err.stack);
+        });
+        console.log(data);
         const { value } = data.rows[0];
+        console.log(value);
+        if (!value || Object.keys(value).length === 0) {
+            throw Error('Key does not exist');
+        }
         const mnemonic = process.env.MNEMONIC;
         const seed = yield require('bip39').mnemonicToSeed(mnemonic);
         // m/44'/60'/0'/0 is the derivation path for the first Ethereum address
