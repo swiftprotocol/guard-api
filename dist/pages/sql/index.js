@@ -19,9 +19,7 @@ router.get('/', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { query, values } = req.body;
-    const hostname = req.hostname;
-    console.log('ORIGIN', req.headers.origin);
-    console.log(hostname);
+    const hostname = req.headers.origin;
     if (!query)
         return res.status(422).json({ error: 'Missing query.' });
     if (query.includes('$') && (!values || values.length < 1))
