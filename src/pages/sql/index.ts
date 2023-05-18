@@ -18,8 +18,15 @@ router.post('/', async (req: Request, res: Response): Promise<Response> => {
   if (!process.env.HOSTS!.split(',').includes(hostname!)) return res.status(401).json({ error: 'Host unauthorized.' })
 
   try {
+    // Connect client
+    await globalThis.sql.connect().catch((err) => {
+      throw Error('[POSTGRESQL] Connection Error: ' + err.stack)
+    })
+
     // Retrieve data
     const data = await globalThis.sql.query(query, values)
+
+    await globalThis.sql.end()
 
     return res.status(200).json(data.rows[0])
   } catch (error) {

@@ -38,13 +38,8 @@ try {
       ssl: { rejectUnauthorized: false },
     })
 
-    await client.connect().catch((err) => {
-      throw Error('[POSTGRESQL] Connection Error: ' + err.stack)
-    })
-
     globalThis.sql = client
 
-    console.log('🐘 PostgreSQL agent running.')
     console.log(`🎉 Running on *::${PORT}`)
   })
 } catch (err) {
