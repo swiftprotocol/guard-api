@@ -69,8 +69,6 @@ router.post('/:userAddress/:type', async (req: Request, res: Response): Promise<
     const { cost } = await client.orderCost({ id: body.order })
     if (!order) return res.status(404).json({ error: 'Order not found.' })
 
-    console.log(order, cost)
-
     // Retrieve item data
     const itemArr = order.items.map(async ({ listing_id, amount }) => {
       const listing = await client.listing({ id: listing_id })
@@ -114,8 +112,6 @@ router.post('/:userAddress/:type', async (req: Request, res: Response): Promise<
       }
     }
 
-    console.log(coin)
-
     // Retrieve authorizations
     const authStr = await retrieveData(userAddress, 'authorizations')
     const authorizations = authStr.split(',')
@@ -125,8 +121,6 @@ router.post('/:userAddress/:type', async (req: Request, res: Response): Promise<
 
     // Retrieve email
     const email = await retrieveData(userAddress, 'email')
-
-    console.log(email)
 
     // Send email
     const mailMsg = {
@@ -168,7 +162,6 @@ router.post('/:userAddress/:type', async (req: Request, res: Response): Promise<
 
     return res.status(200).json({ result: 'sent' })
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ error })
   }
 })
