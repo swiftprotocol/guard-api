@@ -35,6 +35,7 @@ try {
         const client = new pg_1.Client({
             host: process.env.POSTGRES_HOST,
             password: process.env.POSTGRES_PASS,
+            port: parseInt(process.env.POSTGRES_PORT),
             database: 'postgres',
             user: 'guard',
             ssl: { rejectUnauthorized: false },

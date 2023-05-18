@@ -11,6 +11,8 @@ router.post('/', async (req: Request, res: Response): Promise<Response> => {
   const { query, values }: { query: string; values?: any[] } = req.body
   const hostname = req.hostname
 
+  console.log('ORIGIN', req.headers.origin)
+
   console.log(hostname)
 
   if (!query) return res.status(422).json({ error: 'Missing query.' })
