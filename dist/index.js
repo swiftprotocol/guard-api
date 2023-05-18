@@ -28,11 +28,12 @@ app.use('/', require('./pages'));
 app.use('/status', require('./pages/status'));
 app.use('/retrieve', require('./pages/retrieve'));
 app.use('/sql', require('./pages/sql'));
+app.use('/email', require('./pages/email'));
 // Start server & listen for requests
 const PORT = process.env.PORT || 3450;
 try {
     app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-        const client = new pg_1.Client({
+        const client = new pg_1.Pool({
             host: process.env.POSTGRES_HOST,
             password: process.env.POSTGRES_PASS,
             port: parseInt(process.env.POSTGRES_PORT),
@@ -40,11 +41,7 @@ try {
             user: 'guard',
             ssl: { rejectUnauthorized: false },
         });
-        yield client.connect().catch((err) => {
-            throw Error('[POSTGRESQL] Connection Error: ' + err.stack);
-        });
         globalThis.sql = client;
-        console.log('🐘 PostgreSQL agent running.');
         console.log(`🎉 Running on *::${PORT}`);
     }));
 }

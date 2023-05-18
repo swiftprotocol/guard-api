@@ -28,11 +28,15 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!process.env.HOSTS.split(',').includes(hostname))
         return res.status(401).json({ error: 'Host unauthorized.' });
     try {
+        // Connect client
+        const client = yield globalThis.sql.connect();
         // Retrieve data
-        const data = yield globalThis.sql.query(query, values);
+        const data = yield client.query(query, values);
+        client.release();
         return res.status(200).json(data.rows[0]);
     }
     catch (error) {
+        console.log(error);
         return res.status(500).json({ error });
     }
 }));

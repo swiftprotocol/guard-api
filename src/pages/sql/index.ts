@@ -1,7 +1,12 @@
 import type { Request, Response } from 'express'
 import express from 'express'
+import { Pool } from 'pg'
 
 const router = express.Router()
+
+declare global {
+  var sql: Pool
+}
 
 router.get('/', async (_: Request, res: Response) => {
   return res.status(405).end('Cannot GET /sql. Use POST instead.')
@@ -19,17 +24,16 @@ router.post('/', async (req: Request, res: Response): Promise<Response> => {
 
   try {
     // Connect client
-    await globalThis.sql.connect().catch((err) => {
-      throw Error('[POSTGRESQL] Connection Error: ' + err.stack)
-    })
+    const client = await globalThis.sql.connect()
 
     // Retrieve data
-    const data = await globalThis.sql.query(query, values)
+    const data = await client.query(query, values)
 
-    await globalThis.sql.end()
+    client.release()
 
     return res.status(200).json(data.rows[0])
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error })
   }
 })

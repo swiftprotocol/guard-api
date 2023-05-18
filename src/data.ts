@@ -2,16 +2,12 @@ import { hdkey } from 'ethereumjs-wallet'
 import EthCrypto from 'eth-crypto'
 
 export async function retrieveData(address: string, key: string): Promise<string> {
-  await globalThis.sql.connect().catch((err) => {
-    throw Error('[POSTGRESQL] Connection Error: ' + err.stack)
-  })
+  const client = await globalThis.sql.connect()
 
-  const data = await globalThis.sql
-    .query(`SELECT value FROM key_value WHERE key = '${key}+${address}'`)
-    .catch((err) => {
-      console.error(err)
-      throw Error(err.stack)
-    })
+  const data = await client.query(`SELECT value FROM key_value WHERE key = '${key}+${address}'`).catch((err) => {
+    console.error(err)
+    throw Error(err.stack)
+  })
 
   const { value } = data.rows[0]
 
@@ -19,7 +15,7 @@ export async function retrieveData(address: string, key: string): Promise<string
     throw Error('Key does not exist')
   }
 
-  await globalThis.sql.end()
+  client.release()
 
   const mnemonic = process.env.MNEMONIC!
   const seed = await require('bip39').mnemonicToSeed(mnemonic)

@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import { Pool } from 'pg';
 declare global {
-    var sql: Client;
+    var sql: Pool;
 }

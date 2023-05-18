@@ -5,10 +5,10 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
-import { Client } from 'pg'
+import { Pool } from 'pg'
 
 declare global {
-  var sql: Client
+  var sql: Pool
 }
 
 // Load .env
@@ -24,12 +24,13 @@ app.use('/', require('./pages'))
 app.use('/status', require('./pages/status'))
 app.use('/retrieve', require('./pages/retrieve'))
 app.use('/sql', require('./pages/sql'))
+app.use('/email', require('./pages/email'))
 
 // Start server & listen for requests
 const PORT = process.env.PORT || 3450
 try {
   app.listen(PORT, async () => {
-    const client = new Client({
+    const client = new Pool({
       host: process.env.POSTGRES_HOST!,
       password: process.env.POSTGRES_PASS!,
       port: parseInt(process.env.POSTGRES_PORT!),

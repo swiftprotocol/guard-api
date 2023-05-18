@@ -991,6 +991,13 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
+"@babel/runtime@^7.19.0", "@babel/runtime@^7.19.4":
+  version "7.21.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.21.5.tgz#8492dddda9644ae3bda3b45eabe87382caee7200"
+  integrity sha512-8jI69toZqqcsnqGGqwGS4Qb1VwLOEp4hz+CXPywcvjs60u3B4Pom/U/7rm4W8tMOYEB+E9wgD0mW1l3r8qlI9Q==
+  dependencies:
+    regenerator-runtime "^0.13.11"
+
 "@babel/template@^7.18.10", "@babel/template@^7.20.7":
   version "7.20.7"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.20.7.tgz#a15090c2839a83b02aa996c0b4994005841fd5a8"
@@ -1088,7 +1095,7 @@
     "@cosmjs/math" "^0.29.1"
     "@cosmjs/utils" "^0.29.1"
 
-"@cosmjs/amino@^0.29.1", "@cosmjs/amino@^0.29.5":
+"@cosmjs/amino@0.29.5", "@cosmjs/amino@^0.29.1", "@cosmjs/amino@^0.29.5":
   version "0.29.5"
   resolved "https://registry.yarnpkg.com/@cosmjs/amino/-/amino-0.29.5.tgz#053b4739a90b15b9e2b781ccd484faf64bd49aec"
   integrity sha512-Qo8jpC0BiziTSUqpkNatBcwtKNhCovUnFul9SlT/74JUCdLYaeG5hxr3q1cssQt++l4LvlcpF+OUXL48XjNjLw==
@@ -1154,6 +1161,23 @@
     "@cosmjs/tendermint-rpc" "^0.29.1"
     "@cosmjs/utils" "^0.29.1"
     cosmjs-types "^0.5.0"
+    long "^4.0.0"
+    pako "^2.0.2"
+
+"@cosmjs/cosmwasm-stargate@^0.29.5":
+  version "0.29.5"
+  resolved "https://registry.yarnpkg.com/@cosmjs/cosmwasm-stargate/-/cosmwasm-stargate-0.29.5.tgz#3f257da682658833e0f4eb9e8ff758e4d927663a"
+  integrity sha512-TNdSvm2tEE3XMCuxHxquzls56t40hC8qnLeYJWHsY2ECZmRK3KrnpRReEr7N7bLtODToK7X/riYrV0JaYxjrYA==
+  dependencies:
+    "@cosmjs/amino" "^0.29.5"
+    "@cosmjs/crypto" "^0.29.5"
+    "@cosmjs/encoding" "^0.29.5"
+    "@cosmjs/math" "^0.29.5"
+    "@cosmjs/proto-signing" "^0.29.5"
+    "@cosmjs/stargate" "^0.29.5"
+    "@cosmjs/tendermint-rpc" "^0.29.5"
+    "@cosmjs/utils" "^0.29.5"
+    cosmjs-types "^0.5.2"
     long "^4.0.0"
     pako "^2.0.2"
 
@@ -1326,7 +1350,7 @@
     cosmjs-types "^0.5.0"
     long "^4.0.0"
 
-"@cosmjs/proto-signing@^0.29.1", "@cosmjs/proto-signing@^0.29.5":
+"@cosmjs/proto-signing@0.29.5", "@cosmjs/proto-signing@^0.29.1", "@cosmjs/proto-signing@^0.29.5":
   version "0.29.5"
   resolved "https://registry.yarnpkg.com/@cosmjs/proto-signing/-/proto-signing-0.29.5.tgz#af3b62a46c2c2f1d2327d678b13b7262db1fe87c"
   integrity sha512-QRrS7CiKaoETdgIqvi/7JC2qCwCR7lnWaUsTzh/XfRy3McLkEd+cXbKAW3cygykv7IN0VAEIhZd2lyIfT8KwNA==
@@ -1417,7 +1441,7 @@
     protobufjs "~6.11.3"
     xstream "^11.14.0"
 
-"@cosmjs/stargate@^0.29.1":
+"@cosmjs/stargate@0.29.5", "@cosmjs/stargate@^0.29.1", "@cosmjs/stargate@^0.29.5":
   version "0.29.5"
   resolved "https://registry.yarnpkg.com/@cosmjs/stargate/-/stargate-0.29.5.tgz#d597af1c85a3c2af7b5bdbec34d5d40692cc09e4"
   integrity sha512-hjEv8UUlJruLrYGJcUZXM/CziaINOKwfVm2BoSdUnNTMxGvY/jC1ABHKeZUYt9oXHxEJ1n9+pDqzbKc8pT0nBw==
@@ -2140,6 +2164,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@osmonauts/lcd@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@osmonauts/lcd/-/lcd-0.8.0.tgz#fcabba93edadd23f73b2046a5cad897b420a9c84"
+  integrity sha512-k7m2gAVnXc0H4m/eTq4z/8A6hFrr3MPS9wnLV4Xu9/K/WYltCnp2PpiObZm+feZUPK/svES6hxIQeO1bODLx8g==
+  dependencies:
+    "@babel/runtime" "^7.19.0"
+    axios "0.27.2"
+
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"
@@ -2221,6 +2253,29 @@
     mkdirp "^1.0.4"
     mz "^2.7.0"
     prettier "^2.6.2"
+
+"@sendgrid/client@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.7.0.tgz#f8f67abd604205a0d0b1af091b61517ef465fdbf"
+  integrity sha512-SxH+y8jeAQSnDavrTD0uGDXYIIkFylCo+eDofVmZLQ0f862nnqbC3Vd1ej6b7Le7lboyzQF6F7Fodv02rYspuA==
+  dependencies:
+    "@sendgrid/helpers" "^7.7.0"
+    axios "^0.26.0"
+
+"@sendgrid/helpers@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.7.0.tgz#93fb4b6e2f0dc65080440d6a784cc93e8e148757"
+  integrity sha512-3AsAxfN3GDBcXoZ/y1mzAAbKzTtUZ5+ZrHOmWQ279AuaFXUNCh9bPnRpN504bgveTqoW+11IzPg3I0WVgDINpw==
+  dependencies:
+    deepmerge "^4.2.2"
+
+"@sendgrid/mail@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.7.0.tgz#aba09f5ce2e9d8ceee92284c3ea8b4a90b0e38fe"
+  integrity sha512-5+nApPE9wINBvHSUxwOxkkQqM/IAAaBYoP9hw7WwgDNQPxraruVqHizeTitVtKGiqWCKm2mnjh4XGN3fvFLqaw==
+  dependencies:
+    "@sendgrid/client" "^7.7.0"
+    "@sendgrid/helpers" "^7.7.0"
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"
@@ -2727,6 +2782,14 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
+axios@0.27.2, axios@^0.27.2:
+  version "0.27.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
+  dependencies:
+    follow-redirects "^1.14.9"
+    form-data "^4.0.0"
+
 axios@^0.21.2:
   version "0.21.4"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
@@ -2734,13 +2797,12 @@ axios@^0.21.2:
   dependencies:
     follow-redirects "^1.14.0"
 
-axios@^0.27.2:
-  version "0.27.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
-  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
+axios@^0.26.0:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
+  integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
   dependencies:
-    follow-redirects "^1.14.9"
-    form-data "^4.0.0"
+    follow-redirects "^1.14.8"
 
 babel-plugin-istanbul@^6.1.1:
   version "6.1.1"
@@ -3335,6 +3397,11 @@ deepmerge@4.2.2:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
 
+deepmerge@^4.2.2:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.3.1.tgz#44b5f2147cd3b00d4b56137685966f26fd25dd4a"
+  integrity sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==
+
 define-properties@^1.1.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/define-properties/-/define-properties-1.2.0.tgz#52988570670c9eacedd8064f4a990f2405849bd5"
@@ -3909,7 +3976,7 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.5.tgz#76c8584f4fc843db64702a6bd04ab7a8bd666da3"
   integrity sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==
 
-follow-redirects@^1.14.0, follow-redirects@^1.14.9:
+follow-redirects@^1.14.0, follow-redirects@^1.14.8, follow-redirects@^1.14.9:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
@@ -4444,6 +4511,20 @@ json5@^2.2.1, json5@^2.2.2:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
+
+juno-network@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/juno-network/-/juno-network-0.15.0.tgz#790d0921e45decad2c15af0dec0a87a14458f18a"
+  integrity sha512-lC61gotpP6q9FJQtUoJ4K8Gw4Z9QmCuNFXwbIPn7Rtf+OejZgZIHvxBEdvk6Q9TT7aDPD4R5O8tbqK9lLP9n1A==
+  dependencies:
+    "@babel/runtime" "^7.19.4"
+    "@cosmjs/amino" "0.29.5"
+    "@cosmjs/cosmwasm-stargate" "^0.29.5"
+    "@cosmjs/proto-signing" "0.29.5"
+    "@cosmjs/stargate" "0.29.5"
+    "@cosmjs/tendermint-rpc" "^0.29.5"
+    "@osmonauts/lcd" "0.8.0"
+    protobufjs "^6.11.2"
 
 keccak@^3.0.0:
   version "3.0.3"
@@ -5005,7 +5086,7 @@ prettier@^2.6.2:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.7.tgz#bb79fc8729308549d28fe3a98fce73d2c0656450"
   integrity sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==
 
-protobufjs@^6.8.8, protobufjs@~6.11.2, protobufjs@~6.11.3:
+protobufjs@^6.11.2, protobufjs@^6.8.8, protobufjs@~6.11.2, protobufjs@~6.11.3:
   version "6.11.3"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.3.tgz#637a527205a35caa4f3e2a9a4a13ddffe0e7af74"
   integrity sha512-xL96WDdCZYdU7Slin569tFX712BxsxslWwAfAhCYjQKGTq7dAU91Lomy6nLLhh/dyGhk/YH4TwTSRxTzhuHyZg==
