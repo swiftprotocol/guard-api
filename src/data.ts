@@ -5,10 +5,15 @@ export async function retrieveData(address: string, key: string): Promise<string
   const data = await globalThis.sql
     .query(`SELECT value FROM key_value WHERE key = '${key}+${address}'`)
     .catch((err) => {
+      console.error(err)
       throw Error(err.stack)
     })
 
+  console.log(data)
+
   const { value } = data.rows[0]
+
+  console.log(value)
 
   if (!value || Object.keys(value).length === 0) {
     throw Error('Key does not exist')
