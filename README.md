@@ -9,5 +9,3 @@
 <h3 align='center'>⚠️ GuardAPI is still a work in progress. ⚠️</h3>
 
 ---
-
-![SwiftGuard API chart](https://user-images.githubusercontent.com/25516960/226150553-8710505a-1307-4587-8ac3-705e85738b2c.png)
