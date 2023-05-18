@@ -30,8 +30,9 @@ const PORT = process.env.PORT || 3450
 try {
   app.listen(PORT, async () => {
     const client = new Client({
-      host: process.env.POSTGRES_HOST,
-      password: process.env.POSTGRES_PASS,
+      host: process.env.POSTGRES_HOST!,
+      password: process.env.POSTGRES_PASS!,
+      port: parseInt(process.env.POSTGRES_PORT!),
       database: 'postgres',
       user: 'guard',
       ssl: { rejectUnauthorized: false },
