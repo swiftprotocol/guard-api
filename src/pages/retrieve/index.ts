@@ -74,6 +74,7 @@ router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<R
       value: data,
     })
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error })
   }
 })
