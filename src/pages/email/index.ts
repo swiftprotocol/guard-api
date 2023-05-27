@@ -162,6 +162,7 @@ router.post('/:userAddress/:type', async (req: Request, res: Response): Promise<
 
     return res.status(200).json({ result: 'sent' })
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error })
   }
 })
