@@ -44,7 +44,7 @@ try {
     globalThis.sql = client
 
     const analytics = new Analytics({
-      writeKey: process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY!,
+      writeKey: process.env.SEGMENT_WRITE_KEY!,
     })
 
     globalThis.analytics = analytics
