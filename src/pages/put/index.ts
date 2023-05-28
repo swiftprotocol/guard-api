@@ -1,8 +1,7 @@
-import { Analytics } from '@segment/analytics-node'
 import type { Request, Response } from 'express'
 import express from 'express'
 import { Pool } from 'pg'
-import { retrieveData } from 'src/data'
+import { retrieveData } from '../../data'
 
 const router = express.Router()
 
