@@ -77,7 +77,9 @@ router.post('/:userAddress', async (req: Request, res: Response): Promise<Respon
     globalThis.analytics.identify({
       userId: app_id,
       traits: {
-        type: 'organization',
+        company: {
+          id: app_id,
+        },
       },
     })
 
