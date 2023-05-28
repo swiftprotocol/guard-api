@@ -23,7 +23,7 @@ app.use(bodyParser.json()) // Use JSON body
 app.use('/', require('./pages'))
 app.use('/status', require('./pages/status'))
 app.use('/retrieve', require('./pages/retrieve'))
-app.use('/sql', require('./pages/sql'))
+app.use('/put', require('./pages/put'))
 app.use('/email', require('./pages/email'))
 
 // Start server & listen for requests
