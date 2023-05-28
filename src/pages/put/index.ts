@@ -31,7 +31,7 @@ router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<R
       if (!data.rows[0]) return res.status(401).json({ error: 'Host unauthorized.' })
     } catch (error) {
       console.log(error)
-      return res.status(500).end(error)
+      return res.status(500).end((error as any).message)
     }
   } else {
     // If development, get hosts from environment variables
@@ -54,7 +54,7 @@ router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<R
     return res.status(200).json(data.rows[0])
   } catch (error) {
     console.log(error)
-    return res.status(500).end(error)
+    return res.status(500).end((error as any).message)
   }
 })
 

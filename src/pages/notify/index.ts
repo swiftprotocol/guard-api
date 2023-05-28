@@ -33,7 +33,7 @@ router.post('/:userAddress', async (req: Request, res: Response): Promise<Respon
     else app_id = data.rows[0].id
   } catch (error) {
     console.log(error)
-    return res.status(500).end(error)
+    return res.status(500).end((error as any).message)
   }
 
   try {
@@ -77,7 +77,7 @@ router.post('/:userAddress', async (req: Request, res: Response): Promise<Respon
     return res.status(200).json({ result: 'sent' })
   } catch (error) {
     console.log(error)
-    return res.status(500).end(error)
+    return res.status(500).end((error as any).message)
   }
 })
 

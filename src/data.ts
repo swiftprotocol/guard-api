@@ -9,7 +9,7 @@ export async function retrieveData(address: string, key: string): Promise<string
     throw Error(err.stack)
   })
 
-  if (!data.rows[0]) {
+  if (data.rowCount < 1) {
     throw Error('Key does not exist')
   }
 
