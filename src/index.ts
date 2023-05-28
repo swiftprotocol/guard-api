@@ -7,10 +7,13 @@ import cors from 'cors'
 
 import { Pool } from 'pg'
 import { Analytics } from '@segment/analytics-node'
+import { CronJob } from 'cron'
+import axios from 'axios'
 
 declare global {
   var sql: Pool
   var analytics: Analytics
+  var job: CronJob
 }
 
 // Load .env
@@ -48,6 +51,13 @@ try {
     })
 
     globalThis.analytics = analytics
+
+    // Send heartbeat to BetterStack Uptime every 60 minutes
+    if (process.env.HEARTBEAT_URL) {
+      axios(process.env.HEARTBEAT_URL!)
+      const job = new CronJob('0 * * * *', () => axios(process.env.HEARTBEAT_URL!), null, true, 'America/New_York')
+      globalThis.job = job
+    }
 
     console.log(`🎉 Running on *::${PORT}`)
   })

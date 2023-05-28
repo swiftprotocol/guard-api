@@ -3,7 +3,7 @@ import express from 'express'
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response): Response => {
+router.get('/', (_: Request, res: Response): Response => {
   return res.status(200).send(`
     <h2>Guard API</h2>
     <ul>
