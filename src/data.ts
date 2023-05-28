@@ -9,11 +9,11 @@ export async function retrieveData(address: string, key: string): Promise<string
     throw Error(err.stack)
   })
 
-  const { value } = data.rows[0]
-
-  if (!value || Object.keys(value).length === 0) {
+  if (!data.rows[0]) {
     throw Error('Key does not exist')
   }
+
+  const { value } = data.rows[0]
 
   client.release()
 
