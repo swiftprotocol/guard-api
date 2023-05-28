@@ -14,9 +14,9 @@ router.get('/', async (_: Request, res: Response) => {
   return res.status(405).end('Cannot GET /retrieve. Use POST instead.')
 })
 
-router.post('/:userAddress/:key/:namespace', async (req: Request, res: Response): Promise<Response> => {
+router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<Response> => {
   const body = req.body // { msg, type, contract_address }
-  const { userAddress, key, namespace } = req.params
+  const { userAddress, key } = req.params
   const { type } = body
 
   if (!userAddress || !key) return res.status(422).json({ error: 'Missing user address or key.' })
@@ -66,7 +66,7 @@ router.post('/:userAddress/:key/:namespace', async (req: Request, res: Response)
     }
 
     // Retrieve data
-    const data = await retrieveData(userAddress, (namespace ? namespace + '/' : '') + key)
+    const data = await retrieveData(userAddress, (body.namespace ? body.namespace + '/' : '') + key)
 
     return res.status(200).json({
       key,

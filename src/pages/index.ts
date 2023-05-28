@@ -8,8 +8,8 @@ router.get('/', (req: Request, res: Response): Response => {
     <h2>Guard API</h2>
     <ul>
       <li><a href="/status">/status</a></li>
-      <li><a href="/put/[address]/[key]/[namespace]">/put/[address]/[key]/[namespace]</li>
-      <li><a href="/retrieve/[address]/[key]/[namespace]">/retrieve/[address]/[key]/[namespace]</a></li>
+      <li><a href="/put/[address]/[key]">/put/[address]/[key]</li>
+      <li><a href="/retrieve/[address]/[key]">/retrieve/[address]/[key]</a></li>
       <li><a href="/notify">/notify</li>
     </ul>
   `)

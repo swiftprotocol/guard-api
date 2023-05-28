@@ -12,9 +12,9 @@ router.get('/', async (_: Request, res: Response) => {
   return res.status(405).end('Cannot GET /sql. Use POST instead.')
 })
 
-router.post('/:userAddress/:key/:namespace', async (req: Request, res: Response): Promise<Response> => {
-  const { value }: { value: string } = req.body
-  const { userAddress, key, namespace } = req.params
+router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<Response> => {
+  const { value, namespace }: { value: string; namespace: string } = req.body
+  const { userAddress, key } = req.params
   const hostname = req.headers.origin
 
   console.log(userAddress, key, namespace, value)
