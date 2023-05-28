@@ -81,7 +81,8 @@ Here's how you would do this in JavaScript using Axios:
 axios.post(
   'https://guard.swiftprotocol.zone/notify/stars1...',
   {
-    content: '<></>', // HTML content of your notification
+    title: 'My Notification', // Title of your notification
+    content: '<p>Hello world!</p>', // HTML content of your notification
   },
   {
     headers: {

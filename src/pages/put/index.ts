@@ -17,8 +17,6 @@ router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<R
   const { userAddress, key } = req.params
   const hostname = req.headers.origin
 
-  console.log(userAddress, key, namespace, value)
-
   if (!userAddress || !key) return res.status(422).json({ error: 'Missing user address or key.' })
   if (!value) return res.status(422).json({ error: 'Missing value.' })
 
