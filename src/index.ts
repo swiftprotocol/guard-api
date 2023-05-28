@@ -52,10 +52,10 @@ try {
 
     globalThis.analytics = analytics
 
-    // Send heartbeat to BetterStack Uptime every 60 minutes
+    // Send heartbeat to BetterStack Uptime every 15 minutes
     if (process.env.HEARTBEAT_URL) {
       axios(process.env.HEARTBEAT_URL!)
-      const job = new CronJob('0 * * * *', () => axios(process.env.HEARTBEAT_URL!), null, true, 'America/New_York')
+      const job = new CronJob('*/15 * * * *', () => axios(process.env.HEARTBEAT_URL!), null, true, 'America/New_York')
       globalThis.job = job
     }
 
