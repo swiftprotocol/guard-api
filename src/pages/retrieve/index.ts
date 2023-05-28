@@ -68,6 +68,15 @@ router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<R
     // Retrieve data
     const data = await retrieveData(userAddress, (body.namespace ? body.namespace + '/' : '') + key)
 
+    globalThis.analytics.identify({
+      userId: signerAddress,
+    })
+
+    globalThis.analytics.track({
+      userId: signerAddress,
+      event: 'Retrieve Data',
+    })
+
     return res.status(200).json({
       key,
       address: userAddress,

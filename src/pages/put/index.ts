@@ -1,6 +1,8 @@
+import { Analytics } from '@segment/analytics-node'
 import type { Request, Response } from 'express'
 import express from 'express'
 import { Pool } from 'pg'
+import { retrieveData } from 'src/data'
 
 const router = express.Router()
 
@@ -48,6 +50,21 @@ router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<R
         namespace ? namespace + '/' : ''
       }${key}+${userAddress}', '${value}') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;`,
     )
+
+    // Store data in user's analytics profile
+    const decryptedValue = await retrieveData(userAddress, (namespace ? namespace + '/' : '') + key)
+    if (!namespace)
+      globalThis.analytics.identify({
+        userId: userAddress,
+        traits: {
+          [key]: decryptedValue,
+        },
+      })
+    globalThis.analytics.track({
+      userId: userAddress,
+      event: 'Store Data',
+      properties: { [key]: decryptedValue },
+    })
 
     client.release()
 

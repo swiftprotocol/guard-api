@@ -6,9 +6,11 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 
 import { Pool } from 'pg'
+import { Analytics } from '@segment/analytics-node'
 
 declare global {
   var sql: Pool
+  var analytics: Analytics
 }
 
 // Load .env
@@ -29,7 +31,7 @@ app.use('/email', require('./pages/email'))
 // Start server & listen for requests
 const PORT = process.env.PORT || 3450
 try {
-  app.listen(PORT, async () => {
+  const server = app.listen(PORT, async () => {
     const client = new Pool({
       host: process.env.POSTGRES_HOST!,
       password: process.env.POSTGRES_PASS!,
@@ -41,8 +43,24 @@ try {
 
     globalThis.sql = client
 
+    const analytics = new Analytics({
+      writeKey: process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY!,
+    })
+
+    globalThis.analytics = analytics
+
     console.log(`🎉 Running on *::${PORT}`)
   })
+
+  const onExit = async () => {
+    await analytics.closeAndFlush()
+    server.close(() => {
+      console.log('❌ Closing server...')
+      process.exit()
+    })
+  }
+
+  ;['SIGINT', 'SIGTERM'].forEach((code) => process.on(code, onExit))
 } catch (err) {
   console.error(err)
 }

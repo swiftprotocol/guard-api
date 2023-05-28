@@ -74,6 +74,22 @@ router.post('/:userAddress', async (req: Request, res: Response): Promise<Respon
       throw Error(err)
     })
 
+    globalThis.analytics.identify({
+      userId: app_id,
+      traits: {
+        type: 'organization',
+      },
+    })
+
+    globalThis.analytics.track({
+      userId: app_id,
+      event: 'Notify User',
+      properties: {
+        content,
+        title,
+      },
+    })
+
     return res.status(200).json({ result: 'sent' })
   } catch (error) {
     console.log(error)

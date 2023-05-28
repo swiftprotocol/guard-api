@@ -20,6 +20,7 @@
     "@cosmjs/cosmwasm-stargate": "0.29.1",
     "@cosmjs/encoding": "0.26.5",
     "@keplr-wallet/types": "^0.11.56",
+    "@segment/analytics-node": "^1.0.0-beta.26",
     "@sendgrid/mail": "^7.7.0",
     "@swiftprotocol/stargate": "0.26.6",
     "@swiftprotocol/types": "^0.3.2",
