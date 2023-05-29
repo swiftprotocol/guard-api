@@ -38,7 +38,7 @@ router.post('/:userAddress', async (req: Request, res: Response): Promise<Respon
 
   try {
     // Retrieve authorizations
-    const authStr = await retrieveData(userAddress, 'authorizations')
+    const authStr = await retrieveData(userAddress, 'notify-authorizations')
     const authorizations = authStr.split(',')
 
     if (!authorizations.includes(app_id)) return res.status(401).json({ error: 'Access unauthorized' })
@@ -70,16 +70,20 @@ router.post('/:userAddress', async (req: Request, res: Response): Promise<Respon
 
     mail.setApiKey(process.env.SENDGRID_API_KEY!)
 
-    mail.send(mailMsg).catch((err) => {
+    await mail.send(mailMsg).catch((err) => {
       throw Error(err)
     })
 
     globalThis.analytics.identify({
       userId: app_id,
+    })
+
+    globalThis.analytics.group({
+      groupId: app_id,
+      userId: app_id,
       traits: {
-        company: {
-          id: app_id,
-        },
+        name: titleCase(app_id),
+        plan: 'none',
       },
     })
 
@@ -87,6 +91,7 @@ router.post('/:userAddress', async (req: Request, res: Response): Promise<Respon
       userId: app_id,
       event: 'Notify User',
       properties: {
+        user: userAddress,
         content,
         title,
       },

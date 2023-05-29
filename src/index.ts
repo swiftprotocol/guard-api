@@ -30,6 +30,7 @@ app.use('/status', require('./pages/status'))
 app.use('/retrieve', require('./pages/retrieve'))
 app.use('/put', require('./pages/put'))
 app.use('/email', require('./pages/email'))
+app.use('/notify', require('./pages/notify'))
 
 // Start server & listen for requests
 const PORT = process.env.PORT || 3450
