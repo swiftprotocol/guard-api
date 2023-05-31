@@ -22,10 +22,10 @@ function retrieveData(address, key) {
             console.error(err);
             throw Error(err.stack);
         });
-        const { value } = data.rows[0];
-        if (!value || Object.keys(value).length === 0) {
+        if (data.rowCount < 1) {
             throw Error('Key does not exist');
         }
+        const { value } = data.rows[0];
         client.release();
         const mnemonic = process.env.MNEMONIC;
         const seed = yield require('bip39').mnemonicToSeed(mnemonic);

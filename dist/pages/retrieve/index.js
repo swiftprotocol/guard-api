@@ -71,7 +71,14 @@ router.post('/:userAddress/:key', (req, res) => __awaiter(void 0, void 0, void 0
                 return res.status(401).json({ error: 'Access unauthorized' });
         }
         // Retrieve data
-        const data = yield (0, data_1.retrieveData)(userAddress, key);
+        const data = yield (0, data_1.retrieveData)(userAddress, (body.namespace ? body.namespace + '/' : '') + key);
+        globalThis.analytics.identify({
+            userId: signerAddress,
+        });
+        globalThis.analytics.track({
+            userId: signerAddress,
+            event: 'Retrieve Data',
+        });
         return res.status(200).json({
             key,
             address: userAddress,
@@ -79,7 +86,8 @@ router.post('/:userAddress/:key', (req, res) => __awaiter(void 0, void 0, void 0
         });
     }
     catch (error) {
-        return res.status(500).json({ error });
+        console.log(error);
+        return res.status(500).end(error.message);
     }
 }));
 module.exports = router;

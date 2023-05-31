@@ -74,7 +74,6 @@ router.post('/:userAddress/:type', (req, res) => __awaiter(void 0, void 0, void 
         const { cost } = yield client.orderCost({ id: body.order });
         if (!order)
             return res.status(404).json({ error: 'Order not found.' });
-        console.log(order, cost);
         // Retrieve item data
         const itemArr = order.items.map(({ listing_id, amount }) => __awaiter(void 0, void 0, void 0, function* () {
             const listing = yield client.listing({ id: listing_id });
@@ -117,7 +116,6 @@ router.post('/:userAddress/:type', (req, res) => __awaiter(void 0, void 0, void 
                 coin = asset ? asset.symbol : '';
             }
         }
-        console.log(coin);
         // Retrieve authorizations
         const authStr = yield (0, data_1.retrieveData)(userAddress, 'authorizations');
         const authorizations = authStr.split(',');
@@ -126,7 +124,6 @@ router.post('/:userAddress/:type', (req, res) => __awaiter(void 0, void 0, void 
             return res.status(401).json({ error: 'Access unauthorized' });
         // Retrieve email
         const email = yield (0, data_1.retrieveData)(userAddress, 'email');
-        console.log(email);
         // Send email
         const mailMsg = {
             to: email,
