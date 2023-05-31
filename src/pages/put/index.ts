@@ -2,6 +2,10 @@ import type { Request, Response } from 'express'
 import express from 'express'
 import { Pool } from 'pg'
 import { retrieveData } from '../../data'
+import { StdTx } from '@keplr-wallet/types'
+import { SigningStargateClient } from '@swiftprotocol/stargate'
+import { Bech32, fromBase64 } from '@cosmjs/encoding'
+import { rawSecp256k1PubkeyToRawAddress } from '@cosmjs/amino'
 
 const router = express.Router()
 
@@ -14,32 +18,25 @@ router.get('/', async (_: Request, res: Response) => {
 })
 
 router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<Response> => {
-  const { value, namespace }: { value: string; namespace: string } = req.body
+  const { value, namespace, msg }: { value: string; namespace: string; msg: StdTx } = req.body
   const { userAddress, key } = req.params
-  const hostname = req.headers.origin
 
-  if (!userAddress || !key) return res.status(422).json({ error: 'Missing user address or key.' })
+  if (!userAddress || !key || !msg) return res.status(422).json({ error: 'Missing user address, key or signature.' })
   if (!value) return res.status(422).json({ error: 'Missing value.' })
 
-  // // Get list of hosts
-  // if (process.env.NODE_ENV === 'production') {
-  //   // If production, get hosts from database
-  //   try {
-  //     const client = await globalThis.sql.connect()
-  //     const data = await client.query(`SELECT host FROM hosts WHERE host = '${hostname}'`)
-  //     client.release()
-
-  //     if (!data.rows[0]) return res.status(401).json({ error: 'Host unauthorized.' })
-  //   } catch (error) {
-  //     console.log(error)
-  //     return res.status(500).end((error as any).message)
-  //   }
-  // } else {
-  //   // If development, get hosts from environment variables
-  //   if (!process.env.HOSTS!.split(',').includes(hostname!)) return res.status(401).json({ error: 'Host unauthorized.' })
-  // }
-
   try {
+    // Verify user signature
+    const verified = await SigningStargateClient.experimentalAdr36Verify(msg)
+
+    const rawSecp256k1Pubkey = fromBase64(msg.signatures[0].pub_key.value)
+    const rawAddress = rawSecp256k1PubkeyToRawAddress(rawSecp256k1Pubkey)
+    const signerAddress = Bech32.encode('juno', rawAddress)
+
+    if (!verified) return res.status(401).json({ error: 'Invalid signature, could not verify identity.' })
+
+    if (userAddress !== signerAddress)
+      return res.status(401).json({ error: 'Request address and signer address do not match.' })
+
     // Connect client
     const client = await globalThis.sql.connect()
 
