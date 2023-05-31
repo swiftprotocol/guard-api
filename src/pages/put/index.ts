@@ -21,23 +21,23 @@ router.post('/:userAddress/:key', async (req: Request, res: Response): Promise<R
   if (!userAddress || !key) return res.status(422).json({ error: 'Missing user address or key.' })
   if (!value) return res.status(422).json({ error: 'Missing value.' })
 
-  // Get list of hosts
-  if (process.env.NODE_ENV === 'production') {
-    // If production, get hosts from database
-    try {
-      const client = await globalThis.sql.connect()
-      const data = await client.query(`SELECT host FROM hosts WHERE host = '${hostname}'`)
-      client.release()
+  // // Get list of hosts
+  // if (process.env.NODE_ENV === 'production') {
+  //   // If production, get hosts from database
+  //   try {
+  //     const client = await globalThis.sql.connect()
+  //     const data = await client.query(`SELECT host FROM hosts WHERE host = '${hostname}'`)
+  //     client.release()
 
-      if (!data.rows[0]) return res.status(401).json({ error: 'Host unauthorized.' })
-    } catch (error) {
-      console.log(error)
-      return res.status(500).end((error as any).message)
-    }
-  } else {
-    // If development, get hosts from environment variables
-    if (!process.env.HOSTS!.split(',').includes(hostname!)) return res.status(401).json({ error: 'Host unauthorized.' })
-  }
+  //     if (!data.rows[0]) return res.status(401).json({ error: 'Host unauthorized.' })
+  //   } catch (error) {
+  //     console.log(error)
+  //     return res.status(500).end((error as any).message)
+  //   }
+  // } else {
+  //   // If development, get hosts from environment variables
+  //   if (!process.env.HOSTS!.split(',').includes(hostname!)) return res.status(401).json({ error: 'Host unauthorized.' })
+  // }
 
   try {
     // Connect client
