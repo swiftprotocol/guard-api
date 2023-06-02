@@ -23,7 +23,7 @@ import Guard from '@swiftprotocol/guard'
 
 ### Constructing the Guard object
 
-By default, Guard supports `keplr` and `leap` as wallets, both referring to `window.<wallet>`. You can initialize a Guard object using any of the two wallets like so:
+By default, Guard supports `keplr`, `leap` and `comostation` as wallets, both referring to `window.<wallet>` or `window.<wallet>.providers.keplr`. You can initialize a Guard object using any of the two wallets like so:
 
 ```javascript
 const guard = new Guard({
@@ -33,7 +33,7 @@ const guard = new Guard({
 })
 ```
 
-You can also use an unsupported wallet type (such as Cosmostation) by providing an address, hex-encoded public key and signArbitrary method conforming with the [Keplr API signArbitrary method](https://docs.keplr.app/api/#request-signature-for-arbitrary-message). You could technically also do this with Keplr and Leap in apps that support more than just the two base wallets.
+You can also use an unsupported wallet type by providing an address, hex-encoded public key and signArbitrary method conforming with the [Keplr API signArbitrary method](https://docs.keplr.app/api/#request-signature-for-arbitrary-message). You could technically also do this with Keplr and Leap in apps that support more than just the two base wallets.
 
 You can see how to implement this roughly [here](https://github.com/swiftprotocol/guard/blob/a616804ef90623266de86e23814d57cd869f24a4/tests/guard.test.ts#L54).
 
