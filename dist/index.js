@@ -46,8 +46,8 @@ fastify.register(webauthn, { prefix: '/webauthn' });
 fastify.register(passkeys, { prefix: '/passkeys' });
 fastify.register(data, { prefix: '/data' });
 try {
-    const port = process.env.PORT ? parseInt(process.env.PORT) : 3450;
-    fastify.listen({ port }).then(async () => {
+    const port = parseInt(process.env.PORT || '3450');
+    fastify.listen({ port, host: '0.0.0.0' }).then(async () => {
         const [pgHost, pgPass] = [
             process.env.POSTGRES_HOST,
             process.env.POSTGRES_PASS,
