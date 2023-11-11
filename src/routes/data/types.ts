@@ -1,5 +1,4 @@
 import { Type, type Static } from '@sinclair/typebox'
-import { StdTx } from '../../gen/cosmos.js'
 import { SymmKey } from '../../types.js'
 
 export const GetRequest = Type.Object({
@@ -24,7 +23,8 @@ export const SetRequest = Type.Object({
   namespace: Type.Optional(Type.String()),
   symmetricKeys: Type.Array(SymmKey),
   cipherText: Type.String(),
-  signature: StdTx,
+  signature: Type.String(),
+  publicKey: Type.String(),
 })
 
 export type SetRequestType = Static<typeof SetRequest>

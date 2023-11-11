@@ -1,21 +1,41 @@
-export async function retrieveKey(hexAddress) {
+export async function retrieveKeyByAddress(hexAddress) {
     const client = await globalThis.sql.connect();
     const data = await client
-        .query(`SELECT passkey_id FROM passkeys WHERE pubkey = $1`, [hexAddress])
+        .query(`SELECT pubkey, address, passkey_id FROM passkeys WHERE address = $1`, [hexAddress])
         .catch((err) => {
         throw Error(err.stack);
     });
     if (!data.rowCount || data.rowCount < 1) {
         return undefined;
     }
-    const { passkey_id } = data.rows[0];
+    const response = data.rows[0];
     client.release();
-    return passkey_id;
+    return response;
 }
-export async function storeKey(hexAddress, credential) {
+export async function retrieveKeyByPubkey(pubkey) {
+    const client = await globalThis.sql.connect();
+    const data = await client
+        .query(`SELECT pubkey, address, passkey_id FROM passkeys WHERE pubkey = $1`, [pubkey])
+        .catch((err) => {
+        throw Error(err.stack);
+    });
+    if (!data.rowCount || data.rowCount < 1) {
+        return undefined;
+    }
+    const response = data.rows[0];
+    client.release();
+    return response;
+}
+export async function storeKey(publicKey, hexAddress, credential) {
     const client = await globalThis.sql.connect();
     await client
-        .query(`INSERT INTO passkeys (pubkey, passkey_id, passkey_pub, passkey_algo) VALUES ($1, $2, $3, $4) ON CONFLICT (pubkey) DO UPDATE SET passkey_id = EXCLUDED.passkey_id, passkey_pub = EXCLUDED.passkey_pub, passkey_algo = EXCLUDED.passkey_algo`, [hexAddress, credential.id, credential.publicKey, credential.algorithm])
+        .query(`INSERT INTO passkeys (pubkey, address, passkey_id, passkey_pub, passkey_algo) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (address) DO UPDATE SET pubkey = EXCLUDED.pubkey, passkey_id = EXCLUDED.passkey_id, passkey_pub = EXCLUDED.passkey_pub, passkey_algo = EXCLUDED.passkey_algo`, [
+        publicKey,
+        hexAddress,
+        credential.id,
+        credential.publicKey,
+        credential.algorithm,
+    ])
         .catch((err) => {
         throw Error(err.stack);
     });

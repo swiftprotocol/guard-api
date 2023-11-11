@@ -1,8 +1,11 @@
-import { pubkeyToRawAddress } from '@cosmjs/amino'
 import { fromBech32 } from '@cosmjs/encoding'
 import type { FastifyInstance } from 'fastify'
-import { experimentalAdr36Verify } from '../../helpers.js'
+import { verifySignature } from '../../helpers.js'
 import { retrieveData, storeData } from '../../sql/data.js'
+import {
+  retrieveKeyByAddress,
+  retrieveKeyByPubkey,
+} from '../../sql/passkeys.js'
 import {
   ErrorResponseObject,
   ErrorResponseType,
@@ -50,8 +53,14 @@ export default function (
         const rawAddress = fromBech32(address).data
         const hexAddress = Buffer.from(rawAddress).toString('hex')
 
+        const passkey = await retrieveKeyByAddress(hexAddress)
+        if (!passkey)
+          return res
+            .status(404)
+            .send({ error: 'Could not find passkey for specified address.' })
+
         const compositeKey = namespace ? `${namespace}/${key}` : key
-        const entry = await retrieveData(hexAddress, compositeKey)
+        const entry = await retrieveData(passkey.pubkey, compositeKey)
 
         if (!entry)
           return res
@@ -96,18 +105,32 @@ export default function (
       },
     },
     async (req, res) => {
-      const { signature, key, namespace, symmetricKeys, cipherText } = req.body
+      const {
+        publicKey,
+        signature,
+        key,
+        namespace,
+        symmetricKeys,
+        cipherText,
+      } = req.body
 
       try {
-        const verified = await experimentalAdr36Verify(signature)
+        const passkey = await retrieveKeyByPubkey(publicKey)
+        if (!passkey)
+          return res
+            .status(404)
+            .send({ error: 'Could not find passkey for specified public key.' })
+
+        const verified = await verifySignature(
+          publicKey,
+          signature,
+          passkey.address
+        )
 
         if (!verified)
           return res.status(401).send({
             error: 'Invalid signature, could not verify identity.',
           })
-
-        const rawAddress = pubkeyToRawAddress(signature.signatures[0].pub_key)
-        const hexAddress = Buffer.from(rawAddress).toString('hex')
 
         if (key.includes('/'))
           return res
@@ -120,9 +143,11 @@ export default function (
           JSON.stringify(symmetricKeys)
         ).toString('base64')
 
-        await storeData(hexAddress, compositeKey, symmKeysObject, cipherText)
+        await storeData(publicKey, compositeKey, symmKeysObject, cipherText)
 
-        return res.status(200).send({ hexAddress, key: compositeKey })
+        return res
+          .status(200)
+          .send({ hexAddress: passkey.address, key: compositeKey })
       } catch (e) {
         return res.status(500).send({ error: (e as Error).message })
       }

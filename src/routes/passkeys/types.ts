@@ -3,20 +3,23 @@ import { CredentialKey } from '../../gen/auth.js'
 import { StdTx } from '../../gen/cosmos.js'
 
 export const GetRequest = Type.Object({
-  pubkey: Type.String(),
+  address: Type.String(),
 })
 
 export type GetRequestType = Static<typeof GetRequest>
 
 export const GetResponse = Type.Object({
   hexAddress: Type.String(),
+  pubkey: Type.String(),
   passkey: Type.String(),
 })
 
 export type GetResponseType = Static<typeof GetResponse>
 
 export const SetRequest = Type.Object({
-  signature: StdTx,
+  walletSignature: StdTx,
+  signature: Type.String(),
+  publicKey: Type.String(),
   credential: CredentialKey,
 })
 

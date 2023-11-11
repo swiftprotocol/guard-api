@@ -1,5 +1,4 @@
 import { Type } from '@sinclair/typebox';
-import { StdTx } from '../../gen/cosmos.js';
 import { SymmKey } from '../../types.js';
 export const GetRequest = Type.Object({
     address: Type.String(),
@@ -17,7 +16,8 @@ export const SetRequest = Type.Object({
     namespace: Type.Optional(Type.String()),
     symmetricKeys: Type.Array(SymmKey),
     cipherText: Type.String(),
-    signature: StdTx,
+    signature: Type.String(),
+    publicKey: Type.String(),
 });
 export const SetResponse = Type.Object({
     hexAddress: Type.String(),

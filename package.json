@@ -1,6 +1,6 @@
 {
   "name": "@swiftprotocol/guard-api",
-  "version": "0.0.1-alpha01",
+  "version": "0.0.1-alpha02",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
@@ -21,6 +21,7 @@
     "@fastify/swagger": "^8.12.0",
     "@fastify/swagger-ui": "^1.10.1",
     "@fastify/type-provider-typebox": "^3.5.0",
+    "@peculiar/webcrypto": "^1.4.3",
     "@sinclair/typebox": "^0.31.23",
     "@swiftprotocol/auth": "^0.1.4",
     "@swiftprotocol/stargate": "^0.26.6",

@@ -1,12 +1,21 @@
 import type { CredentialKey } from '@swiftprotocol/auth/types.js'
 
-export async function retrieveKey(
+interface RetrieveKeyReturnType {
+  passkey_id: string
+  pubkey: string
+  address: string
+}
+
+export async function retrieveKeyByAddress(
   hexAddress: string
-): Promise<string | undefined> {
+): Promise<RetrieveKeyReturnType | undefined> {
   const client = await globalThis.sql.connect()
 
   const data = await client
-    .query(`SELECT passkey_id FROM passkeys WHERE pubkey = $1`, [hexAddress])
+    .query(
+      `SELECT pubkey, address, passkey_id FROM passkeys WHERE address = $1`,
+      [hexAddress]
+    )
     .catch((err) => {
       throw Error(err.stack)
     })
@@ -15,14 +24,40 @@ export async function retrieveKey(
     return undefined
   }
 
-  const { passkey_id } = data.rows[0]
+  const response = data.rows[0]
 
   client.release()
 
-  return passkey_id
+  return response
+}
+
+export async function retrieveKeyByPubkey(
+  pubkey: string
+): Promise<RetrieveKeyReturnType | undefined> {
+  const client = await globalThis.sql.connect()
+
+  const data = await client
+    .query(
+      `SELECT pubkey, address, passkey_id FROM passkeys WHERE pubkey = $1`,
+      [pubkey]
+    )
+    .catch((err) => {
+      throw Error(err.stack)
+    })
+
+  if (!data.rowCount || data.rowCount < 1) {
+    return undefined
+  }
+
+  const response = data.rows[0]
+
+  client.release()
+
+  return response
 }
 
 export async function storeKey(
+  publicKey: string,
   hexAddress: string,
   credential: CredentialKey
 ): Promise<void> {
@@ -30,8 +65,14 @@ export async function storeKey(
 
   await client
     .query(
-      `INSERT INTO passkeys (pubkey, passkey_id, passkey_pub, passkey_algo) VALUES ($1, $2, $3, $4) ON CONFLICT (pubkey) DO UPDATE SET passkey_id = EXCLUDED.passkey_id, passkey_pub = EXCLUDED.passkey_pub, passkey_algo = EXCLUDED.passkey_algo`,
-      [hexAddress, credential.id, credential.publicKey, credential.algorithm]
+      `INSERT INTO passkeys (pubkey, address, passkey_id, passkey_pub, passkey_algo) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (address) DO UPDATE SET pubkey = EXCLUDED.pubkey, passkey_id = EXCLUDED.passkey_id, passkey_pub = EXCLUDED.passkey_pub, passkey_algo = EXCLUDED.passkey_algo`,
+      [
+        publicKey,
+        hexAddress,
+        credential.id,
+        credential.publicKey,
+        credential.algorithm,
+      ]
     )
     .catch((err) => {
       throw Error(err.stack)

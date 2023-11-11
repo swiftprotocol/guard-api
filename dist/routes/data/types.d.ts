@@ -32,30 +32,8 @@ export declare const SetRequest: import("@sinclair/typebox").TObject<{
         encryptedPrivateKey: import("@sinclair/typebox").TString;
     }>>;
     cipherText: import("@sinclair/typebox").TString;
-    signature: import("@sinclair/typebox").TObject<{
-        msg: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-            type: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-            value: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TAny>;
-        }>>>>;
-        fee: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TObject<{
-            amount: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-                denom: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-                amount: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-            }>>>>;
-            gas: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-            payer: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>>;
-            granter: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>>;
-            feePayer: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>>;
-        }>>;
-        signatures: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-            pub_key: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TObject<{
-                type: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-                value: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-            }>>;
-            signature: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-        }>>>>;
-        memo: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
-    }>;
+    signature: import("@sinclair/typebox").TString;
+    publicKey: import("@sinclair/typebox").TString;
 }>;
 export type SetRequestType = Static<typeof SetRequest>;
 export declare const SetResponse: import("@sinclair/typebox").TObject<{

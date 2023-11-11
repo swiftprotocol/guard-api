@@ -1,15 +1,16 @@
 import { type Static } from '@sinclair/typebox';
 export declare const GetRequest: import("@sinclair/typebox").TObject<{
-    pubkey: import("@sinclair/typebox").TString;
+    address: import("@sinclair/typebox").TString;
 }>;
 export type GetRequestType = Static<typeof GetRequest>;
 export declare const GetResponse: import("@sinclair/typebox").TObject<{
     hexAddress: import("@sinclair/typebox").TString;
+    pubkey: import("@sinclair/typebox").TString;
     passkey: import("@sinclair/typebox").TString;
 }>;
 export type GetResponseType = Static<typeof GetResponse>;
 export declare const SetRequest: import("@sinclair/typebox").TObject<{
-    signature: import("@sinclair/typebox").TObject<{
+    walletSignature: import("@sinclair/typebox").TObject<{
         msg: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
             type: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
             value: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TAny>;
@@ -33,6 +34,8 @@ export declare const SetRequest: import("@sinclair/typebox").TObject<{
         }>>>>;
         memo: import("@sinclair/typebox").TReadonly<import("@sinclair/typebox").TString>;
     }>;
+    signature: import("@sinclair/typebox").TString;
+    publicKey: import("@sinclair/typebox").TString;
     credential: import("@sinclair/typebox").TObject<{
         id: import("@sinclair/typebox").TString;
         publicKey: import("@sinclair/typebox").TString;

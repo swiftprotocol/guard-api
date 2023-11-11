@@ -1,7 +1,7 @@
-import { pubkeyToRawAddress } from '@cosmjs/amino';
 import { fromBech32 } from '@cosmjs/encoding';
-import { experimentalAdr36Verify } from '../../helpers.js';
+import { verifySignature } from '../../helpers.js';
 import { retrieveData, storeData } from '../../sql/data.js';
+import { retrieveKeyByAddress, retrieveKeyByPubkey, } from '../../sql/passkeys.js';
 import { ErrorResponseObject, } from '../../types.js';
 import { GetRequest, GetResponse, SetRequest, SetResponse, } from './types.js';
 export default function (fastify, _, done) {
@@ -22,8 +22,13 @@ export default function (fastify, _, done) {
                     .send({ error: `Key cannot include "/" character.` });
             const rawAddress = fromBech32(address).data;
             const hexAddress = Buffer.from(rawAddress).toString('hex');
+            const passkey = await retrieveKeyByAddress(hexAddress);
+            if (!passkey)
+                return res
+                    .status(404)
+                    .send({ error: 'Could not find passkey for specified address.' });
             const compositeKey = namespace ? `${namespace}/${key}` : key;
-            const entry = await retrieveData(hexAddress, compositeKey);
+            const entry = await retrieveData(passkey.pubkey, compositeKey);
             if (!entry)
                 return res
                     .status(404)
@@ -51,23 +56,28 @@ export default function (fastify, _, done) {
             },
         },
     }, async (req, res) => {
-        const { signature, key, namespace, symmetricKeys, cipherText } = req.body;
+        const { publicKey, signature, key, namespace, symmetricKeys, cipherText, } = req.body;
         try {
-            const verified = await experimentalAdr36Verify(signature);
+            const passkey = await retrieveKeyByPubkey(publicKey);
+            if (!passkey)
+                return res
+                    .status(404)
+                    .send({ error: 'Could not find passkey for specified public key.' });
+            const verified = await verifySignature(publicKey, signature, passkey.address);
             if (!verified)
                 return res.status(401).send({
                     error: 'Invalid signature, could not verify identity.',
                 });
-            const rawAddress = pubkeyToRawAddress(signature.signatures[0].pub_key);
-            const hexAddress = Buffer.from(rawAddress).toString('hex');
             if (key.includes('/'))
                 return res
                     .status(400)
                     .send({ error: `Key cannot include "/" character.` });
             const compositeKey = namespace ? `${namespace}/${key}` : key;
             const symmKeysObject = Buffer.from(JSON.stringify(symmetricKeys)).toString('base64');
-            await storeData(hexAddress, compositeKey, symmKeysObject, cipherText);
-            return res.status(200).send({ hexAddress, key: compositeKey });
+            await storeData(publicKey, compositeKey, symmKeysObject, cipherText);
+            return res
+                .status(200)
+                .send({ hexAddress: passkey.address, key: compositeKey });
         }
         catch (e) {
             return res.status(500).send({ error: e.message });
