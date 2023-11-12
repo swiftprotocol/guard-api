@@ -21,4 +21,13 @@ export async function storeData(owner, key, symmkeys, ciphertext) {
     });
     client.release();
 }
+export async function removeAllDataForOwner(owner) {
+    const client = await globalThis.sql.connect();
+    await client
+        .query(`DELETE FROM data WHERE owner = $1`, [owner])
+        .catch((err) => {
+        throw Error(err.stack);
+    });
+    client.release();
+}
 //# sourceMappingURL=data.js.map

@@ -2,6 +2,7 @@ import { pubkeyToRawAddress } from '@cosmjs/amino'
 import { fromBech32 } from '@cosmjs/encoding'
 import type { FastifyInstance } from 'fastify'
 import { experimentalAdr36Verify, verifySignature } from '../../helpers.js'
+import { removeAllDataForOwner } from '../../sql/data.js'
 import { retrieveKeyByAddress, storeKey } from '../../sql/passkeys.js'
 import { ErrorResponseObject, ErrorResponseType } from '../../types.js'
 import {
@@ -99,6 +100,12 @@ export default function (
           return res
             .status(401)
             .send({ error: 'Invalid signature, could not verify identity.' })
+
+        const currentKey = await retrieveKeyByAddress(hexAddress)
+
+        if (currentKey) {
+          await removeAllDataForOwner(currentKey.pubkey)
+        }
 
         await storeKey(publicKey, hexAddress, credential)
 

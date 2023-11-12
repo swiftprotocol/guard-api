@@ -47,3 +47,15 @@ export async function storeData(
 
   client.release()
 }
+
+export async function removeAllDataForOwner(owner: string): Promise<void> {
+  const client = await globalThis.sql.connect()
+
+  await client
+    .query(`DELETE FROM data WHERE owner = $1`, [owner])
+    .catch((err) => {
+      throw Error(err.stack)
+    })
+
+  client.release()
+}
