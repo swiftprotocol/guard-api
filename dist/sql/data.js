@@ -1,5 +1,7 @@
+import { getPostgresPool } from '../helpers.js';
 export async function retrieveData(owner, key) {
-    const client = await globalThis.sql.connect();
+    const sql = getPostgresPool();
+    const client = await sql.connect();
     const data = await client
         .query(`SELECT * FROM data WHERE owner = $1 AND key = $2`, [owner, key])
         .catch((err) => {
@@ -13,7 +15,8 @@ export async function retrieveData(owner, key) {
     return response;
 }
 export async function storeData(owner, key, symmkeys, ciphertext) {
-    const client = await globalThis.sql.connect();
+    const sql = getPostgresPool();
+    const client = await sql.connect();
     await client
         .query(`INSERT INTO data (owner, key, symmkeys, ciphertext) VALUES ($1, $2, $3, $4) ON CONFLICT (owner, key) DO UPDATE SET symmkeys = EXCLUDED.symmkeys, ciphertext = EXCLUDED.ciphertext`, [owner, key, symmkeys, ciphertext])
         .catch((err) => {
@@ -22,7 +25,8 @@ export async function storeData(owner, key, symmkeys, ciphertext) {
     client.release();
 }
 export async function removeAllDataForOwner(owner) {
-    const client = await globalThis.sql.connect();
+    const sql = getPostgresPool();
+    const client = await sql.connect();
     await client
         .query(`DELETE FROM data WHERE owner = $1`, [owner])
         .catch((err) => {

@@ -31,6 +31,7 @@ export default function (fastify, _, done) {
             });
         }
         catch (e) {
+            console.log(e);
             return res.status(500).send({ error: e.message });
         }
     });

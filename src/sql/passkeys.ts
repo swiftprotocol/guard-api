@@ -1,4 +1,5 @@
 import type { CredentialKey } from '@swiftprotocol/auth/types.js'
+import { getPostgresPool } from '../helpers.js'
 
 interface RetrieveKeyReturnType {
   passkey_id: string
@@ -9,7 +10,8 @@ interface RetrieveKeyReturnType {
 export async function retrieveKeyByAddress(
   hexAddress: string
 ): Promise<RetrieveKeyReturnType | undefined> {
-  const client = await globalThis.sql.connect()
+  const sql = getPostgresPool()
+  const client = await sql.connect()
 
   const data = await client
     .query(
@@ -34,7 +36,8 @@ export async function retrieveKeyByAddress(
 export async function retrieveKeyByPubkey(
   pubkey: string
 ): Promise<RetrieveKeyReturnType | undefined> {
-  const client = await globalThis.sql.connect()
+  const sql = getPostgresPool()
+  const client = await sql.connect()
 
   const data = await client
     .query(
@@ -61,7 +64,8 @@ export async function storeKey(
   hexAddress: string,
   credential: CredentialKey
 ): Promise<void> {
-  const client = await globalThis.sql.connect()
+  const sql = getPostgresPool()
+  const client = await sql.connect()
 
   await client
     .query(

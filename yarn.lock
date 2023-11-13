@@ -326,10 +326,12 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.31.23.tgz#5ae0235824e63b595952dceb001b813349688b1f"
   integrity sha512-ZzrzE8yCrWWU4mcBstBgdlBMjB8My3ESY9nZ/v996GptIJb4+MU1p7s1Qxrc2xvZeOiDDnAheLLmdHjPgZV79g==
 
-"@swiftprotocol/auth@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@swiftprotocol/auth/-/auth-0.1.4.tgz#a156f4f7c2157d35efe61b38f3b8e3bffc38aca2"
-  integrity sha512-87YeGOc7kxvdqi8T3sHxOXfvd/t1s60FdGK5Im6vFg+MlfGdnDfW9dV5Jg3t6IuZFrUbUBghsW61viSOE6ok/A==
+"@swiftprotocol/auth@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@swiftprotocol/auth/-/auth-0.2.0.tgz#4d86c8f32bef6d8123a2dd0d4c1ed90118f3bb19"
+  integrity sha512-ywTeBAGl/FLU9WE6YO2KDP+7dUUCu0SXB1IuxGB0VIu9A3GO/QCwdoiHppiuuhbA/xGicPGxaF7BH0/nwppSYA==
+  dependencies:
+    "@peculiar/webcrypto" "^1.4.3"
 
 "@swiftprotocol/stargate@^0.26.6":
   version "0.26.6"

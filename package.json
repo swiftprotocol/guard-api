@@ -24,7 +24,7 @@
     "@fastify/type-provider-typebox": "^3.5.0",
     "@peculiar/webcrypto": "^1.4.3",
     "@sinclair/typebox": "^0.31.23",
-    "@swiftprotocol/auth": "^0.1.4",
+    "@swiftprotocol/auth": "^0.2.0",
     "@swiftprotocol/stargate": "^0.26.6",
     "axios": "^1.6.1",
     "cron": "^3.1.6",

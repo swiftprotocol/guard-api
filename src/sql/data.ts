@@ -1,3 +1,5 @@
+import { getPostgresPool } from '../helpers.js'
+
 interface RetrieveDataReturnType {
   owner: string
   key: string
@@ -9,7 +11,8 @@ export async function retrieveData(
   owner: string,
   key: string
 ): Promise<RetrieveDataReturnType | undefined> {
-  const client = await globalThis.sql.connect()
+  const sql = getPostgresPool()
+  const client = await sql.connect()
 
   const data = await client
     .query(`SELECT * FROM data WHERE owner = $1 AND key = $2`, [owner, key])
@@ -34,7 +37,8 @@ export async function storeData(
   symmkeys: string,
   ciphertext: string
 ): Promise<void> {
-  const client = await globalThis.sql.connect()
+  const sql = getPostgresPool()
+  const client = await sql.connect()
 
   await client
     .query(
@@ -49,7 +53,8 @@ export async function storeData(
 }
 
 export async function removeAllDataForOwner(owner: string): Promise<void> {
-  const client = await globalThis.sql.connect()
+  const sql = getPostgresPool()
+  const client = await sql.connect()
 
   await client
     .query(`DELETE FROM data WHERE owner = $1`, [owner])

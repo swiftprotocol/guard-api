@@ -4,6 +4,23 @@ import { fromBase64, fromBech32, fromHex } from '@cosmjs/encoding';
 import { arrayContentEquals } from '@cosmjs/utils';
 import { Crypto } from '@peculiar/webcrypto';
 import { isMsgSignData } from '@swiftprotocol/stargate/build/signingstargateclient.js';
+import pg from 'pg';
+export function getPostgresPool() {
+    const [pgHost, pgPass] = [
+        process.env.POSTGRES_HOST,
+        process.env.POSTGRES_PASS,
+    ];
+    if (!pgHost || !pgPass)
+        throw new Error('Missing environment variables: "POSTGRES_HOST", "POSTGRES_PASS"');
+    return new pg.Pool({
+        host: pgHost,
+        password: pgPass,
+        port: 5432,
+        database: 'postgres',
+        user: 'guard',
+        ssl: { rejectUnauthorized: false },
+    });
+}
 export function hexPubKeyToAddress(pubkey) {
     const rawSecp256k1Pubkey = fromHex(pubkey);
     const rawAddress = rawSecp256k1PubkeyToRawAddress(rawSecp256k1Pubkey);

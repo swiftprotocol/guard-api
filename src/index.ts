@@ -4,7 +4,6 @@ import type { RegistrationChecks } from './types.js'
 import axios from 'axios'
 import dotenv from 'dotenv'
 import path from 'path'
-import pg from 'pg'
 
 import FastifyCors from '@fastify/cors'
 import Swagger from '@fastify/swagger'
@@ -22,7 +21,6 @@ import passkeys from './routes/passkeys/index.js'
 import webauthn from './routes/webauthn/index.js'
 
 declare global {
-  var sql: pg.Pool
   var authChallenges: Map<string, RegistrationChecks>
 }
 
@@ -72,30 +70,8 @@ fastify.register(data, { prefix: '/data' })
 try {
   const port = parseInt(process.env.PORT || '3450')
   fastify.listen({ port, host: '0.0.0.0' }).then(async () => {
-    const [pgHost, pgPass] = [
-      process.env.POSTGRES_HOST,
-      process.env.POSTGRES_PASS,
-    ]
-
     const heartbeatUrl = process.env.HEARTBEAT_URL
 
-    if (!pgHost || !pgPass)
-      throw new Error(
-        'Missing environment variables: "POSTGRES_HOST", "POSTGRES_PASS"'
-      )
-
-    const sql = new pg.Pool({
-      host: pgHost,
-      password: pgPass,
-      port: 5432,
-      database: 'postgres',
-      user: 'guard',
-      ssl: { rejectUnauthorized: false },
-    })
-
-    console.log(`🔌 Connected to database`)
-
-    globalThis.sql = sql
     globalThis.authChallenges = new Map<string, RegistrationChecks>()
 
     // Send heartbeat to BetterStack Uptime every 15 minutes

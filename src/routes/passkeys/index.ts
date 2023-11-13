@@ -55,6 +55,7 @@ export default function (
           passkey: passkeyResponse.passkey_id,
         })
       } catch (e) {
+        console.log(e)
         return res.status(500).send({ error: (e as Error).message })
       }
     }
