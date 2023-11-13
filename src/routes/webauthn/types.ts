@@ -2,7 +2,7 @@ import { Type, type Static } from '@sinclair/typebox'
 import { RegistrationEncoded, RegistrationParsed } from '../../gen/auth.js'
 
 export const ChallengeRequest = Type.Object({
-  pubkey: Type.String(),
+  address: Type.String(),
 })
 
 export type ChallengeRequestType = Static<typeof ChallengeRequest>
@@ -15,7 +15,7 @@ export const ChallengeResponse = Type.Object({
 export type ChallengeResponseType = Static<typeof ChallengeResponse>
 
 export const VerifyRequest = Type.Object({
-  pubkey: Type.String(),
+  address: Type.String(),
   registration: RegistrationEncoded,
 })
 

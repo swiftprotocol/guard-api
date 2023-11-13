@@ -1,6 +1,6 @@
 import { type Static } from '@sinclair/typebox';
 export declare const ChallengeRequest: import("@sinclair/typebox").TObject<{
-    pubkey: import("@sinclair/typebox").TString;
+    address: import("@sinclair/typebox").TString;
 }>;
 export type ChallengeRequestType = Static<typeof ChallengeRequest>;
 export declare const ChallengeResponse: import("@sinclair/typebox").TObject<{
@@ -9,7 +9,7 @@ export declare const ChallengeResponse: import("@sinclair/typebox").TObject<{
 }>;
 export type ChallengeResponseType = Static<typeof ChallengeResponse>;
 export declare const VerifyRequest: import("@sinclair/typebox").TObject<{
-    pubkey: import("@sinclair/typebox").TString;
+    address: import("@sinclair/typebox").TString;
     registration: import("@sinclair/typebox").TObject<{
         username: import("@sinclair/typebox").TString;
         credential: import("@sinclair/typebox").TObject<{

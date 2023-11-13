@@ -1,8 +1,8 @@
+import { fromBech32 } from '@cosmjs/encoding'
 import { verifyRegistration } from '@swiftprotocol/auth/server.js'
 import { randomChallenge } from '@swiftprotocol/auth/utils.js'
 import cron from 'cron'
 import { FastifyInstance } from 'fastify'
-import { hexPubKeyToAddress } from '../../helpers.js'
 import { ErrorResponseObject, ErrorResponseType } from '../../types.js'
 import {
   ChallengeRequest,
@@ -35,24 +35,26 @@ export default function (
       },
     },
     async (req, res) => {
-      const { pubkey } = req.body
+      const { address } = req.body
       const { origin } = req.headers
 
       if (!origin) return res.status(500).send({ error: 'Invalid origin.' })
 
       try {
-        const hexAddress = hexPubKeyToAddress(pubkey)
+        const rawAddress = fromBech32(address).data
+        const hexAddress = Buffer.from(rawAddress).toString('hex')
+
         const challenge = randomChallenge()
 
-        globalThis.authChallenges.set(pubkey, { challenge, origin })
+        globalThis.authChallenges.set(hexAddress, { challenge, origin })
 
         // In 5 minutes, if the challenge is still there, remove it
         // This is to prevent a malicious actor from filling up the memory
         new cron.CronJob(
           '*/5 * * * *',
           () => {
-            if (globalThis.authChallenges.has(pubkey)) {
-              globalThis.authChallenges.delete(pubkey)
+            if (globalThis.authChallenges.has(hexAddress)) {
+              globalThis.authChallenges.delete(hexAddress)
             }
           },
           null,
@@ -82,20 +84,19 @@ export default function (
       },
     },
     async (req, res) => {
-      const { pubkey, registration } = req.body as {
-        pubkey: any
-        registration: any
-      }
+      const { address, registration } = req.body
 
       try {
-        const challenge = globalThis.authChallenges.get(pubkey)
+        const rawAddress = fromBech32(address).data
+        const hexAddress = Buffer.from(rawAddress).toString('hex')
+
+        const challenge = globalThis.authChallenges.get(hexAddress)
         if (!challenge)
           return res
             .status(404)
             .send({ error: 'No challenge found for this public key.' })
 
         const verified = await verifyRegistration(registration, challenge)
-        const hexAddress = hexPubKeyToAddress(pubkey)
 
         return res.status(200).send({
           hexAddress,
