@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import path from 'path'
 import pg from 'pg'
 
+import FastifyCors from '@fastify/cors'
 import Swagger from '@fastify/swagger'
 import SwaggerUI from '@fastify/swagger-ui'
 import Fastify from 'fastify'
@@ -33,6 +34,11 @@ dotenv.config({ path: `${dirname}/../.env` })
 const fastify = Fastify({
   logger: process.env.NODE_ENV === 'development',
 }).withTypeProvider<TypeBoxTypeProvider>()
+
+fastify.register(FastifyCors, {
+  origin: '*',
+  methods: ['POST'],
+})
 
 fastify.register(Swagger, {
   swagger: {

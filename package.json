@@ -1,6 +1,6 @@
 {
   "name": "@swiftprotocol/guard-api",
-  "version": "0.0.1-alpha03",
+  "version": "0.0.1-alpha04",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
@@ -18,6 +18,7 @@
     "@cosmjs/crypto": "^0.31.3",
     "@cosmjs/encoding": "^0.31.3",
     "@cosmjs/utils": "^0.31.3",
+    "@fastify/cors": "^8.4.1",
     "@fastify/swagger": "^8.12.0",
     "@fastify/swagger-ui": "^1.10.1",
     "@fastify/type-provider-typebox": "^3.5.0",
