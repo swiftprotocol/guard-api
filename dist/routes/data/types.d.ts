@@ -33,7 +33,7 @@ export declare const SetRequest: import("@sinclair/typebox").TObject<{
     }>>;
     cipherText: import("@sinclair/typebox").TString;
     signature: import("@sinclair/typebox").TString;
-    publicKey: import("@sinclair/typebox").TString;
+    pubkey: import("@sinclair/typebox").TString;
 }>;
 export type SetRequestType = Static<typeof SetRequest>;
 export declare const SetResponse: import("@sinclair/typebox").TObject<{

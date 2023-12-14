@@ -4,16 +4,16 @@ import type { FastifyInstance } from 'fastify'
 import { experimentalAdr36Verify, verifySignature } from '../../helpers.js'
 import { removeAllDataForOwner } from '../../sql/data.js'
 import { retrieveKeyByAddress, storeKey } from '../../sql/passkeys.js'
-import { ErrorResponseObject, ErrorResponseType } from '../../types.js'
+import { ErrorResponseObject, type ErrorResponseType } from '../../types.js'
 import {
   GetRequest,
-  GetRequestType,
   GetResponse,
-  GetResponseType,
   SetRequest,
-  SetRequestType,
   SetResponse,
-  SetResponseType,
+  type GetRequestType,
+  type GetResponseType,
+  type SetRequestType,
+  type SetResponseType,
 } from './types.js'
 
 export default function (

@@ -56,14 +56,14 @@ export default function (fastify, _, done) {
             },
         },
     }, async (req, res) => {
-        const { publicKey, signature, key, namespace, symmetricKeys, cipherText, } = req.body;
+        const { pubkey, signature, key, namespace, symmetricKeys, cipherText } = req.body;
         try {
-            const passkey = await retrieveKeyByPubkey(publicKey);
+            const passkey = await retrieveKeyByPubkey(pubkey);
             if (!passkey)
                 return res
                     .status(404)
                     .send({ error: 'Could not find passkey for specified public key.' });
-            const verified = await verifySignature(publicKey, signature, passkey.address);
+            const verified = await verifySignature(pubkey, signature, passkey.address);
             if (!verified)
                 return res.status(401).send({
                     error: 'Invalid signature, could not verify identity.',
@@ -73,8 +73,8 @@ export default function (fastify, _, done) {
                     .status(400)
                     .send({ error: `Key cannot include "/" character.` });
             const compositeKey = namespace ? `${namespace}/${key}` : key;
-            const symmKeysObject = Buffer.from(JSON.stringify(symmetricKeys)).toString('base64');
-            await storeData(publicKey, compositeKey, symmKeysObject, cipherText);
+            const symmKeysEncoded = Buffer.from(JSON.stringify(symmetricKeys)).toString('base64');
+            await storeData(pubkey, compositeKey, symmKeysEncoded, cipherText);
             return res
                 .status(200)
                 .send({ hexAddress: passkey.address, key: compositeKey });

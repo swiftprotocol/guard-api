@@ -2,17 +2,17 @@ import { fromBech32 } from '@cosmjs/encoding'
 import { verifyRegistration } from '@swiftprotocol/auth/server.js'
 import { randomChallenge } from '@swiftprotocol/auth/utils.js'
 import cron from 'cron'
-import { FastifyInstance } from 'fastify'
-import { ErrorResponseObject, ErrorResponseType } from '../../types.js'
+import type { FastifyInstance } from 'fastify'
+import { ErrorResponseObject, type ErrorResponseType } from '../../types.js'
 import {
   ChallengeRequest,
-  ChallengeRequestType,
   ChallengeResponse,
-  ChallengeResponseType,
   VerifyRequest,
-  VerifyRequestType,
   VerifyResponse,
-  VerifyResponseType,
+  type ChallengeRequestType,
+  type ChallengeResponseType,
+  type VerifyRequestType,
+  type VerifyResponseType,
 } from './types.js'
 
 export default function (

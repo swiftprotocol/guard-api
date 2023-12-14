@@ -1,6 +1,6 @@
 {
   "name": "@swiftprotocol/guard-api",
-  "version": "0.0.1-alpha04",
+  "version": "0.0.1-alpha05",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
@@ -30,15 +30,18 @@
     "cron": "^3.1.6",
     "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
+    "fastify-plugin": "^4.5.1",
     "openapi-types": "^12.1.3",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "socket.io": "^4.7.2",
+    "web-push": "^3.6.6"
   },
   "devDependencies": {
-    "@sinclair/typebox-codegen": "^0.8.11",
     "@tsconfig/node16": "^16.1.1",
     "@types/cron": "^2.4.0",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.9",
+    "@types/web-push": "^3.6.3",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
     "prettier-plugin-organize-imports": "^3.2.4",

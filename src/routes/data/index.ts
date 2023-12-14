@@ -8,18 +8,18 @@ import {
 } from '../../sql/passkeys.js'
 import {
   ErrorResponseObject,
-  ErrorResponseType,
   SymmKeyType,
+  type ErrorResponseType,
 } from '../../types.js'
 import {
   GetRequest,
-  GetRequestType,
   GetResponse,
-  GetResponseType,
   SetRequest,
-  SetRequestType,
   SetResponse,
-  SetResponseType,
+  type GetRequestType,
+  type GetResponseType,
+  type SetRequestType,
+  type SetResponseType,
 } from './types.js'
 
 export default function (
@@ -105,24 +105,18 @@ export default function (
       },
     },
     async (req, res) => {
-      const {
-        publicKey,
-        signature,
-        key,
-        namespace,
-        symmetricKeys,
-        cipherText,
-      } = req.body
+      const { pubkey, signature, key, namespace, symmetricKeys, cipherText } =
+        req.body
 
       try {
-        const passkey = await retrieveKeyByPubkey(publicKey)
+        const passkey = await retrieveKeyByPubkey(pubkey)
         if (!passkey)
           return res
             .status(404)
             .send({ error: 'Could not find passkey for specified public key.' })
 
         const verified = await verifySignature(
-          publicKey,
+          pubkey,
           signature,
           passkey.address
         )
@@ -139,11 +133,11 @@ export default function (
 
         const compositeKey = namespace ? `${namespace}/${key}` : key
 
-        const symmKeysObject = Buffer.from(
+        const symmKeysEncoded = Buffer.from(
           JSON.stringify(symmetricKeys)
         ).toString('base64')
 
-        await storeData(publicKey, compositeKey, symmKeysObject, cipherText)
+        await storeData(pubkey, compositeKey, symmKeysEncoded, cipherText)
 
         return res
           .status(200)

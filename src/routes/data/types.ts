@@ -24,7 +24,7 @@ export const SetRequest = Type.Object({
   symmetricKeys: Type.Array(SymmKey),
   cipherText: Type.String(),
   signature: Type.String(),
-  publicKey: Type.String(),
+  pubkey: Type.String(),
 })
 
 export type SetRequestType = Static<typeof SetRequest>
