@@ -21,7 +21,6 @@ export const SetRequest = Type.Object({
 export type SetRequestType = Static<typeof SetRequest>
 
 export const SetResponse = Type.Object({
-  pubkey: Type.String(),
   authorizations: Type.Array(Type.String()),
 })
 
