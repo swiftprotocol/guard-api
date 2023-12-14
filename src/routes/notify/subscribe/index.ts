@@ -19,7 +19,7 @@ export default function (
     Body: SubscribeRequestType
     Reply: SubscribeResponseType | ErrorResponseType
   }>(
-    '/get',
+    '/',
     {
       schema: {
         body: SubscribeRequest,
