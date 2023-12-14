@@ -12,15 +12,19 @@ export const EmailResponse = Type.Object({
 
 export type EmailResponseType = Static<typeof EmailResponse>
 
+export const PushNotification = Type.Object({
+  title: Type.String(),
+  body: Type.String(),
+  icon: Type.String(),
+})
+
+export type PushNotificationType = Static<typeof PushNotification>
+
 export const PushRequest = Type.Object({
   recipientHexAddress: Type.String(),
   pubkey: Type.String(),
   signature: Type.String(),
-  notification: Type.Object({
-    title: Type.String(),
-    body: Type.String(),
-    icon: Type.String(),
-  }),
+  notification: PushNotification,
 })
 
 export type PushRequestType = Static<typeof PushRequest>

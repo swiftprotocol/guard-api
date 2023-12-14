@@ -13,6 +13,8 @@ import Fastify from 'fastify'
 
 import FastifySocketIO from './plugins/socketio.js'
 
+import WebPush from 'web-push'
+
 import { CronJob } from 'cron'
 import { fileURLToPath } from 'url'
 import logo from './image.js'
@@ -114,6 +116,19 @@ try {
   const port = parseInt(process.env.PORT || '3450')
   fastify.listen({ port, host: '0.0.0.0' }).then(async () => {
     const heartbeatUrl = process.env.HEARTBEAT_URL
+
+    const vapidPublicKey = process.env.VAPID_PUBLIC_KEY
+    const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY
+    const vapidEmail = process.env.VAPID_EMAIL
+
+    if (!vapidPublicKey || !vapidPrivateKey || !vapidEmail) {
+      console.error(
+        '🚨 VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, and VAPID_EMAIL must be set in .env'
+      )
+      process.exit(1)
+    }
+
+    WebPush.setVapidDetails(vapidEmail, vapidPublicKey, vapidPrivateKey)
 
     globalThis.authChallenges = new Map<string, RegistrationChecks>()
 

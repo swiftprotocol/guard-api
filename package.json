@@ -1,6 +1,6 @@
 {
   "name": "@swiftprotocol/guard-api",
-  "version": "0.0.1-alpha05",
+  "version": "0.0.1-alpha06",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",

@@ -4,6 +4,7 @@ import { verifySignature } from '../../helpers.js'
 import { retrieveAppByPubkey } from '../../sql/apps.js'
 import {
   retrieveAuthorizations,
+  retrieveClient,
   retrieveSubscription,
 } from '../../sql/notify.js'
 import { retrieveKeyByAddress } from '../../sql/passkeys.js'
@@ -107,29 +108,41 @@ export default function (
             error: 'Invalid signature, could not verify app identity.',
           })
 
-        const subscriptionEncoded = await retrieveSubscription(
-          passkey.pubkey,
-          app.id
-        )
+        const activeClient = await retrieveClient(passkey.pubkey, app.id)
 
-        if (!subscriptionEncoded)
-          return res.status(404).send({
-            error: 'Could not find push subscription for this app and address.',
-          })
+        if (activeClient) {
+          fastify.io
+            .of('/notify')
+            .to(activeClient.socket)
+            .emit('notification', notification)
 
-        const subscription = JSON.parse(
-          Buffer.from(subscriptionEncoded.subscription, 'base64').toString()
-        )
-
-        const sendResult = await WebPush.sendNotification(
-          subscription,
-          JSON.stringify(notification)
-        )
-
-        if (sendResult.statusCode !== 200 && sendResult.statusCode !== 201) {
-          return res.status(200).send({ delivered: false })
-        } else {
           return res.status(200).send({ delivered: true })
+        } else {
+          const subscriptionEncoded = await retrieveSubscription(
+            passkey.pubkey,
+            app.id
+          )
+
+          if (!subscriptionEncoded)
+            return res.status(404).send({
+              error:
+                'Could not find push subscription for this app and address.',
+            })
+
+          const subscription = JSON.parse(
+            Buffer.from(subscriptionEncoded.subscription, 'base64').toString()
+          )
+
+          const sendResult = await WebPush.sendNotification(
+            subscription,
+            JSON.stringify(notification)
+          )
+
+          if (sendResult.statusCode !== 200 && sendResult.statusCode !== 201) {
+            return res.status(200).send({ delivered: false })
+          } else {
+            return res.status(200).send({ delivered: true })
+          }
         }
       } catch (e) {
         return res.status(500).send({ error: (e as Error).message })
