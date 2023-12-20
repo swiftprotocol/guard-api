@@ -31,7 +31,9 @@ import notify_subscribe from './routes/notify/subscribe/index.js'
 
 import livechat from './routes/ws/livechat/index.js'
 
-import { verifySignature } from './helpers.js'
+import { pubkeyToRawAddress } from '@cosmjs/amino'
+import { StdTx } from './gen/cosmos.js'
+import { experimentalAdr36Verify, verifySignature } from './helpers.js'
 import type {
   ClientToServerEventsType,
   InterServerEventsType,
@@ -42,6 +44,7 @@ import {
   addLivechatClient,
   queryIsLivechatClientConnected,
   removeLivechatClient,
+  retrieveLivechatRegistration,
 } from './sql/livechat.js'
 import { addClient, removeClient } from './sql/notify.js'
 import { retrieveKeyByPubkey } from './sql/passkeys.js'
@@ -190,12 +193,34 @@ try {
     fastify.io.of('/livechat').on('connection', async (socket) => {
       socket.emit('healthcheck')
 
-      if (!socket.handshake.query.pubkey || !socket.handshake.query.username) {
+      if (
+        !socket.handshake.query.pubkey ||
+        !socket.handshake.query.walletSignature
+      ) {
         return
       }
 
+      const walletSignature = JSON.parse(
+        Buffer.from(
+          socket.handshake.query.walletSignature as string,
+          'base64'
+        ).toString()
+      ) as StdTx
+
+      const verified = await experimentalAdr36Verify(walletSignature)
+
+      if (!verified) return
+
+      const rawAddress = pubkeyToRawAddress(
+        walletSignature.signatures[0].pub_key
+      )
+      const hexAddress = Buffer.from(rawAddress).toString('hex')
+      const registration = await retrieveLivechatRegistration(hexAddress)
+
+      if (!registration) return
+
+      socket.data.username = registration.username
       socket.data.pubkey = socket.handshake.query.pubkey as string
-      socket.data.username = socket.handshake.query.username as string
 
       try {
         await addLivechatClient(socket.data.pubkey, socket.data.username)
