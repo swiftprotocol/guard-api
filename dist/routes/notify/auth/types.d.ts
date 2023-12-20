@@ -14,7 +14,6 @@ export declare const SetRequest: import("@sinclair/typebox").TObject<{
 }>;
 export type SetRequestType = Static<typeof SetRequest>;
 export declare const SetResponse: import("@sinclair/typebox").TObject<{
-    pubkey: import("@sinclair/typebox").TString;
     authorizations: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;
 }>;
 export type SetResponseType = Static<typeof SetResponse>;

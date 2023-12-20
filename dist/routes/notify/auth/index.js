@@ -60,7 +60,7 @@ export default function (fastify, _, done) {
                     });
             }
             await storeAuthorizations(pubkey, authorizations.join(','));
-            return res.status(200).send({ pubkey, authorizations });
+            return res.status(200).send({ authorizations });
         }
         catch (e) {
             return res.status(500).send({ error: e.message });

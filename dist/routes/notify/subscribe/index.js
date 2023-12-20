@@ -5,7 +5,7 @@ import { retrieveKeyByPubkey } from '../../../sql/passkeys.js';
 import { ErrorResponseObject } from '../../../types.js';
 import { SubscribeRequest, } from './types.js';
 export default function (fastify, _, done) {
-    fastify.post('/get', {
+    fastify.post('/', {
         schema: {
             body: SubscribeRequest,
             response: {

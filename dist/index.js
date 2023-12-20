@@ -6,6 +6,7 @@ import Swagger from '@fastify/swagger';
 import SwaggerUI from '@fastify/swagger-ui';
 import Fastify from 'fastify';
 import FastifySocketIO from './plugins/socketio.js';
+import WebPush from 'web-push';
 import { CronJob } from 'cron';
 import { fileURLToPath } from 'url';
 import logo from './image.js';
@@ -17,8 +18,9 @@ import notify_auth from './routes/notify/auth/index.js';
 import notify from './routes/notify/index.js';
 import notify_subscribe from './routes/notify/subscribe/index.js';
 import livechat from './routes/ws/livechat/index.js';
-import { verifySignature } from './helpers.js';
-import { addLivechatClient, queryIsLivechatClientConnected, removeLivechatClient, } from './sql/livechat.js';
+import { pubkeyToRawAddress } from '@cosmjs/amino';
+import { experimentalAdr36Verify, verifySignature } from './helpers.js';
+import { addLivechatClient, queryIsLivechatClientConnected, removeLivechatClient, retrieveLivechatRegistration, } from './sql/livechat.js';
 import { addClient, removeClient } from './sql/notify.js';
 import { retrieveKeyByPubkey } from './sql/passkeys.js';
 const filename = fileURLToPath(import.meta.url);
@@ -67,6 +69,14 @@ try {
     const port = parseInt(process.env.PORT || '3450');
     fastify.listen({ port, host: '0.0.0.0' }).then(async () => {
         const heartbeatUrl = process.env.HEARTBEAT_URL;
+        const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+        const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+        const vapidEmail = process.env.VAPID_EMAIL;
+        if (!vapidPublicKey || !vapidPrivateKey || !vapidEmail) {
+            console.error('🚨 VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, and VAPID_EMAIL must be set in .env');
+            process.exit(1);
+        }
+        WebPush.setVapidDetails(vapidEmail, vapidPublicKey, vapidPrivateKey);
         globalThis.authChallenges = new Map();
         // Send heartbeat to BetterStack Uptime every 15 minutes
         if (heartbeatUrl) {
@@ -108,11 +118,21 @@ try {
         });
         fastify.io.of('/livechat').on('connection', async (socket) => {
             socket.emit('healthcheck');
-            if (!socket.handshake.query.pubkey || !socket.handshake.query.username) {
+            if (!socket.handshake.query.pubkey ||
+                !socket.handshake.query.walletSignature) {
                 return;
             }
+            const walletSignature = JSON.parse(Buffer.from(socket.handshake.query.walletSignature, 'base64').toString());
+            const verified = await experimentalAdr36Verify(walletSignature);
+            if (!verified)
+                return;
+            const rawAddress = pubkeyToRawAddress(walletSignature.signatures[0].pub_key);
+            const hexAddress = Buffer.from(rawAddress).toString('hex');
+            const registration = await retrieveLivechatRegistration(hexAddress);
+            if (!registration)
+                return;
+            socket.data.username = registration.username;
             socket.data.pubkey = socket.handshake.query.pubkey;
-            socket.data.username = socket.handshake.query.username;
             try {
                 await addLivechatClient(socket.data.pubkey, socket.data.username);
             }

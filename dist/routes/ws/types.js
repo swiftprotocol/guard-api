@@ -1,6 +1,8 @@
 import { Type } from '@sinclair/typebox';
+import { PushNotification } from '../notify/types.js';
 export const ServerToClientEvents = Type.Object({
     chatMsgFromServer: Type.Function([Type.String(), Type.String(), Type.String()], Type.Void()),
+    notification: Type.Function([PushNotification], Type.Void()),
     healthcheck: Type.Function([], Type.Void()),
 });
 export const ClientToServerEvents = Type.Object({

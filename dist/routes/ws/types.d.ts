@@ -1,6 +1,11 @@
 import { type Static } from '@sinclair/typebox';
 export declare const ServerToClientEvents: import("@sinclair/typebox").TObject<{
     chatMsgFromServer: import("@sinclair/typebox").TFunction<[import("@sinclair/typebox").TString, import("@sinclair/typebox").TString, import("@sinclair/typebox").TString], import("@sinclair/typebox").TVoid>;
+    notification: import("@sinclair/typebox").TFunction<[import("@sinclair/typebox").TObject<{
+        title: import("@sinclair/typebox").TString;
+        body: import("@sinclair/typebox").TString;
+        icon: import("@sinclair/typebox").TString;
+    }>], import("@sinclair/typebox").TVoid>;
     healthcheck: import("@sinclair/typebox").TFunction<[], import("@sinclair/typebox").TVoid>;
 }>;
 export type ServerToClientEventsType = Static<typeof ServerToClientEvents>;

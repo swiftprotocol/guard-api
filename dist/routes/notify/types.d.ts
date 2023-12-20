@@ -5,6 +5,12 @@ export declare const EmailResponse: import("@sinclair/typebox").TObject<{
     message: import("@sinclair/typebox").TString;
 }>;
 export type EmailResponseType = Static<typeof EmailResponse>;
+export declare const PushNotification: import("@sinclair/typebox").TObject<{
+    title: import("@sinclair/typebox").TString;
+    body: import("@sinclair/typebox").TString;
+    icon: import("@sinclair/typebox").TString;
+}>;
+export type PushNotificationType = Static<typeof PushNotification>;
 export declare const PushRequest: import("@sinclair/typebox").TObject<{
     recipientHexAddress: import("@sinclair/typebox").TString;
     pubkey: import("@sinclair/typebox").TString;

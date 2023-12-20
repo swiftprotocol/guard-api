@@ -1,7 +1,7 @@
 import WebPush from 'web-push';
 import { verifySignature } from '../../helpers.js';
 import { retrieveAppByPubkey } from '../../sql/apps.js';
-import { retrieveAuthorizations, retrieveSubscription, } from '../../sql/notify.js';
+import { retrieveAuthorizations, retrieveClient, retrieveSubscription, } from '../../sql/notify.js';
 import { retrieveKeyByAddress } from '../../sql/passkeys.js';
 import { ErrorResponseObject } from '../../types.js';
 import { EmailRequest, EmailResponse, PushRequest, PushResponse, } from './types.js';
@@ -65,18 +65,28 @@ export default function (fastify, _, done) {
                 return res.status(401).send({
                     error: 'Invalid signature, could not verify app identity.',
                 });
-            const subscriptionEncoded = await retrieveSubscription(passkey.pubkey, app.id);
-            if (!subscriptionEncoded)
-                return res.status(404).send({
-                    error: 'Could not find push subscription for this app and address.',
-                });
-            const subscription = JSON.parse(Buffer.from(subscriptionEncoded.subscription, 'base64').toString());
-            const sendResult = await WebPush.sendNotification(subscription, JSON.stringify(notification));
-            if (sendResult.statusCode !== 200 && sendResult.statusCode !== 201) {
-                return res.status(200).send({ delivered: false });
+            const activeClient = await retrieveClient(passkey.pubkey, app.id);
+            if (activeClient) {
+                fastify.io
+                    .of('/notify')
+                    .to(activeClient.socket)
+                    .emit('notification', notification);
+                return res.status(200).send({ delivered: true });
             }
             else {
-                return res.status(200).send({ delivered: true });
+                const subscriptionEncoded = await retrieveSubscription(passkey.pubkey, app.id);
+                if (!subscriptionEncoded)
+                    return res.status(404).send({
+                        error: 'Could not find push subscription for this app and address.',
+                    });
+                const subscription = JSON.parse(Buffer.from(subscriptionEncoded.subscription, 'base64').toString());
+                const sendResult = await WebPush.sendNotification(subscription, JSON.stringify(notification));
+                if (sendResult.statusCode !== 200 && sendResult.statusCode !== 201) {
+                    return res.status(200).send({ delivered: false });
+                }
+                else {
+                    return res.status(200).send({ delivered: true });
+                }
             }
         }
         catch (e) {
